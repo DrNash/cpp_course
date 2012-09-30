@@ -78,8 +78,11 @@ gtest_main.a : gtest-all.o gtest_main.o
 
 # Builds the tests and their associated objects
 
+file.o : $(USER_DIR)/file.cc $(GTEST_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/file.cc		
+
 file_test.o : $(TEST_DIR)/file_test.cc $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/file_test.cc		
 
-file_test : file_test.o gtest_main.a
+file_test : file.o file_test.o gtest_main.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
