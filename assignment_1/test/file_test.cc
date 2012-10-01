@@ -25,4 +25,7 @@ TEST(File, TypedefTest) {
 	validateVectorEquality(expectedVector, realFile);
 }
 
-TEST(File, )
+TEST(File, ReadIntoFile) {
+	File someFile;
+	std::ifstream file_stream ("file_test.cc");
+}

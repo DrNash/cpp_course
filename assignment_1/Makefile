@@ -50,7 +50,7 @@ run_tests :
 	done \
 
 clean :
-	rm -f $(TESTS) gtest.a gtest_main.a *.o main
+	rm -f $(TESTS) gtest.a gtest_main.a *.o main main_as_deque
 
 # Builds gtest.a and gtest_main.a.
 
@@ -85,4 +85,22 @@ file_test.o : $(TEST_DIR)/file_test.cc $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/file_test.cc		
 
 file_test : file.o file_test.o gtest_main.a
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
+
+main_as_deque.o : main_as_deque.cc 
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c main_as_deque.cc
+
+main_as_list.o : main_as_list.cc 
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c main_as_list.cc
+
+main.o : main.cc 
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c main.cc
+
+main : main.o 
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
+
+main_as_deque : main_as_deque.o 
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
+
+main_as_list : main_as_list.o 
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
