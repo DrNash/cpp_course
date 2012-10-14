@@ -2,6 +2,8 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <list>
+#include <deque>
 #include "scribe.h"
 
 Scribe::Scribe(std::string filename) {
@@ -22,12 +24,12 @@ void Scribe::open_file(std::string filename) {
 
 void Scribe::mark() {
 	undo_buffer.clear();
-	undo_buffer = std::vector<std::string>(editor_buffer);
+	undo_buffer = text_container (editor_buffer);
 }
 
 void Scribe::undo() {
 	editor_buffer.clear();
-	editor_buffer = std::vector<std::string>(undo_buffer);
+	editor_buffer = text_container (undo_buffer);
 }
 
 void Scribe::add_line(std::string line) {
@@ -39,7 +41,7 @@ void Scribe::mark_portion(std::string start, std::string end) {
 	std::string buffer;
 	clipping.clear();
 
-	for(it = editor_buffer.begin(); it < editor_buffer.end(); ++it) {
+	for(it = editor_buffer.begin(); it != editor_buffer.end(); ++it) {
 		size_t start_pos = (*it).find(start);
 		if(start_pos != std::string::npos) {
 			buffer += (*it).substr(start_pos);
@@ -50,7 +52,7 @@ void Scribe::mark_portion(std::string start, std::string end) {
 			} else {
 				clipping += buffer;
 				text_container::iterator it2;
-				for(it2 = it+1; it2 < editor_buffer.end(); ++it2) {
+				for(it2 = ++it; it2 != editor_buffer.end(); ++it2) {
 					end_pos = (*it2).find(end);
 					if(end_pos != std::string::npos) {
 						clipping += (*it2).substr(0,end_pos + end.length());
@@ -58,6 +60,7 @@ void Scribe::mark_portion(std::string start, std::string end) {
 						clipping += *it2; 
 					}
 				}
+				--it;
 			}
 		}
 	}
@@ -66,7 +69,7 @@ void Scribe::mark_portion(std::string start, std::string end) {
 void Scribe::insert(std::string insert_str) {
 	if(clipping.length() > 0) {
 		text_container::iterator it;
-		for(it = editor_buffer.begin(); it < editor_buffer.end(); ++it) {
+		for(it = editor_buffer.begin(); it != editor_buffer.end(); ++it) {
 			size_t start_pos = (*it).find(insert_str);
 			if(start_pos != std::string::npos) {
 				(*it).insert(start_pos + insert_str.length(), clipping);
@@ -80,7 +83,7 @@ void Scribe::insert(std::string insert_str) {
 
 void Scribe::delete_phrase(std::string dead_words) {
 	text_container::iterator it;
-	for(it = editor_buffer.begin(); it < editor_buffer.end(); ++it) {
+	for(it = editor_buffer.begin(); it != editor_buffer.end(); ++it) {
 		size_t start_pos = (*it).find(dead_words);
 		while(start_pos != std::string::npos) {
 			(*it).erase(start_pos, dead_words.length());
@@ -91,7 +94,7 @@ void Scribe::delete_phrase(std::string dead_words) {
 
 void Scribe::substitute_phrase(std::string dead_phrase, std::string new_phrase) {
 	text_container::iterator it;
-	for(it = editor_buffer.begin(); it < editor_buffer.end(); ++it) {
+	for(it = editor_buffer.begin(); it != editor_buffer.end(); ++it) {
 		size_t start_pos = (*it).find(dead_phrase);
 		while(start_pos != std::string::npos) {
 			(*it).replace(start_pos, dead_phrase.length(), new_phrase);
@@ -105,14 +108,14 @@ std::string Scribe::retrieve_portion() {
 }
 
 std::string Scribe::get_file_contents() {
-	std::string collapsed_vector;
+	std::string collapsed_text;
 
 	text_container::iterator it;
 	it = editor_buffer.begin();
 
-	for(; it < editor_buffer.end(); ++it) {
-		collapsed_vector += *it;
+	for(; it != editor_buffer.end(); ++it) {
+		collapsed_text += *it;
 	}
 
-	return collapsed_vector;
+	return collapsed_text;
 }
