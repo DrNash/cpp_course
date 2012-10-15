@@ -2,6 +2,8 @@ README_test_results.txt
 
 Ryan Nash, 10/10/2012
 
+To run execute "make timer_test" and run the resulting ./timer_test file. This will execute the main.cc program.
+
 The "text_container" typedef allows you to change the stl container by just changing it in the scribe.h file once.  I ran the main program (built with 'make timer_test') 3 times for each container. At small levels the times were so insignificant I had to run the series of edits 50 times in a loop (including file re-opens and such) also using a very large input file (~5,000 lines). These are the results:
 
 List: 
