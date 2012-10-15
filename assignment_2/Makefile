@@ -78,6 +78,12 @@ gtest_main.a : gtest-all.o gtest_main.o
 
 # Builds the tests and their associated objects	
 
+main.o : main.cc
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c main.cc
+
+timer.o : $(USER_DIR)/timer.cc
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/timer.cc
+
 scribe.o : $(USER_DIR)/scribe.cc
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/scribe.cc
 
@@ -85,4 +91,7 @@ scribe_test.o : $(TEST_DIR)/scribe_test.cc $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/scribe_test.cc		
 
 scribe_test : scribe.o scribe_test.o gtest_main.a
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
+
+timer_test : scribe.o main.o timer.o
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@

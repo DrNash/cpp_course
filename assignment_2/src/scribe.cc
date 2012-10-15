@@ -1,9 +1,4 @@
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <vector>
-#include <list>
-#include <deque>
+
 #include "scribe.h"
 
 Scribe::Scribe(std::string filename) {

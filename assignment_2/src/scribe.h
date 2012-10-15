@@ -1,3 +1,10 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+#include <list>
+#include <deque>
+
 class Scribe {
 	typedef std::vector<std::string> text_container;
 private:
