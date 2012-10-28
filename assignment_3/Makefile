@@ -50,7 +50,7 @@ run_tests :
 	done \
 
 clean :
-	rm -f $(TESTS) gtest.a gtest_main.a *.o 
+	rm -f $(TESTS) gtest.a gtest_main.a main *.o 
 
 # Builds gtest.a and gtest_main.a.
 
