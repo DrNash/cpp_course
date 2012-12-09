@@ -1,0 +1,11 @@
+Ryan Nash
+Assignment 3
+10/27/2012
+
+To run you can execute "make main" and run the following ./main program. This will take a text file in the test directory (containing the beginning of Asimov's "The Last Question") and run print the word statistics out of it.
+
+I added a header that is aware of the "scale" of the stars so you can see which each star represents dyanamically. A side effect of using a sliding scale based on the maximum value is that on long enough documents you occasionally get blank stars for seldomly used words. Whether or not we wanted a default of at least one star is debatable and easily added; sticking true to the scale seemed more logical to me.
+
+I was initially going to add the formatted output functionality to the Scribe (editor) class. But the more I worked with it the more I realized that a separate reporter class made a lot more sense. Now the formatted output of the stats or reports needs only to get a string of content from the Scribe class, an API that is very easy to maintain, rather than needing to have deep knowledge about how Scribe stores its words/sentences/content.
+
+This allowed me to keep the full-line string storage format I had initially gone with for the Scribe class. If we keep manipulating the editor's buffer content I will probably eventually move over to storing the content by 'word' or symbol but this added functionality didn't require Scribe to change internally (a good thing).
