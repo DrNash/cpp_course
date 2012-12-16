@@ -30,7 +30,7 @@ CXXFLAGS += -g -Wall -Wextra
 
 # All tests produced by this Makefile.  Remember to add new tests you
 # created to the list.
-TESTS = 
+TESTS = mail_server_test
 
 # All Google Test headers.  Usually you shouldn't change this
 # definition.
@@ -77,6 +77,14 @@ gtest_main.a : gtest-all.o gtest_main.o
 	$(AR) $(ARFLAGS) $@ $^
 
 # Builds the tests and their associated objects	
+mail_server.o : $(USER_DIR)/mail_system/mail_server.cc
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/mail_system/mail_server.cc
+
+mail_server_test.o : $(TEST_DIR)/mail_server_test.cc $(GTEST_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/mail_server_test.cc
+
+mail_server_test : mail_server.o mail_server_test.o gtest_main.a
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
 
 main.o : main.cc
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c main.cc	
