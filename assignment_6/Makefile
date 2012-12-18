@@ -30,7 +30,7 @@ CXXFLAGS += -g -Wall -Wextra
 
 # All tests produced by this Makefile.  Remember to add new tests you
 # created to the list.
-TESTS = mail_server_test
+TESTS = mail_server_test id_gen_test
 
 # All Google Test headers.  Usually you shouldn't change this
 # definition.
@@ -78,6 +78,9 @@ gtest_main.a : gtest-all.o gtest_main.o
 
 # Builds the tests and their associated objects	
 
+id_gen.o : $(USER_DIR)/mail_system/id_gen.cc
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/mail_system/id_gen.cc
+
 message.o : $(USER_DIR)/mail_system/message.cc
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/mail_system/message.cc
 
@@ -87,7 +90,13 @@ mail_server.o : $(USER_DIR)/mail_system/mail_server.cc
 mail_server_test.o : $(TEST_DIR)/mail_server_test.cc $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/mail_server_test.cc
 
+id_gen_test.o : $(TEST_DIR)/id_gen_test.cc $(GTEST_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/id_gen_test.cc
+
 mail_server_test : message.o mail_server.o mail_server_test.o gtest_main.a
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
+
+id_gen_test : id_gen.o id_gen_test.o gtest_main.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
 
 main.o : main.cc
