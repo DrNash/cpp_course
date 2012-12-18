@@ -31,5 +31,27 @@ TEST(MailServer, AddMailAndConfirm) {
 
 	std::vector<Message> ryans_messages = m_serv.get_mail("ryan");
 
-	EXPECT_EQ(ryans_messages[0].get_subject(), "a subject");
+	EXPECT_EQ("a subject", ryans_messages[0].get_subject());
+}
+
+TEST(MailServer, MailForSeveralUsers) {
+	MailServer m_serv;
+	std::vector<std::string> to_vec;
+	to_vec.push_back("ryan");
+
+	Message msg1(to_vec, "msg 1 subject");
+	EXPECT_TRUE(m_serv.add_message(msg1.get_to()[0], msg1));
+
+	to_vec.push_back("kristine");
+	Message msg2(to_vec, "msg 2 subject");
+
+	EXPECT_TRUE(m_serv.add_message(msg2.get_to()[0], msg2));
+	EXPECT_TRUE(m_serv.add_message(msg2.get_to()[1], msg2));
+
+	std::vector<Message> ryans_messages = m_serv.get_mail("ryan");
+	std::vector<Message> kristines_messages = m_serv.get_mail("kristine");
+
+	EXPECT_EQ("msg 1 subject", ryans_messages[0].get_subject());
+	EXPECT_EQ("msg 2 subject", ryans_messages[1].get_subject());
+	EXPECT_EQ("msg 2 subject", kristines_messages[1].get_subject());
 }
